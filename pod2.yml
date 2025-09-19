@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-name
+  namespace: dev
+  labels:
+    location: uk
+    department: devops
+    env: testing
+spec:
+  containers:
+  - name: pod-resource
+    image: ubuntu:latest
+    command: ["/bin/bash", "-c", "while true; do echo 'We are 18 days into the 30 days of DevOps'; sleep 30; done"]
+    resources:
+      requests:
+        memory: "32Mi"
+        cpu: "200m"
+      limits:
+        memory: "64Mi"
+        cpu: "400m"

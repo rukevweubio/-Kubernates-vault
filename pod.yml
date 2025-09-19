@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deploy-app
+  namespace: dev
+  labels:
+    location: india
+    department: devops
+    env: production
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-deploy-app
+  template:
+    metadata:
+      labels:
+        app: my-deploy-app
+    spec:
+      initContainers:
+      - name: init-ubuntu
+        image: ubuntu:latest
+        command: ["/bin/bash", "-c", "echo 'This is Kubernetes init container' && sleep 5"]
+        volumeMounts:
+        - name: my-volume
+          mountPath: /tmp/container1
+      containers:
+      - name: nginx-container
+        image: nginx:latest
+        command: ["/bin/bash", "-c", "while true; do echo 'This is Kubernetes main container'; sleep 10; done"]
+        volumeMounts:
+        - name: my-volume
+          mountPath: /tmp/container2
+      volumes:
+      - name: my-volume
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service-pod
+  namespace: dev
+spec:
+  selector:
+    app: my-deploy-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 30080   # fixed NodePort (range: 30000–32767)
+  type: NodePort

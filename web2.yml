@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mygradleapp
+  namespace: dev
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mygradleapp
+  template:
+    metadata:
+      labels:
+        app: mygradleapp
+    spec:
+      containers:
+      - name: mygradleapp-container
+        image: rukevweubio/mygradleapp:latest
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mygradleapp-service
+  namespace: dev
+spec:
+  selector:
+    app: mygradleapp
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: NodePort
