@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-namespace-c
+  namespace: namespace-a
+spec:
+  podSelector: {}   # applies to all pods in namespace-a
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: namespace-c
+      ports:
+        - protocol: TCP
+          port: 80
