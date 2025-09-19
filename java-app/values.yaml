@@ -1,0 +1,30 @@
+replicaCount: 3
+
+image:
+  repository: rukevweubio/java-app
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: NodePort   
+  port: 8080
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 250m
+    memory: 128Mi
+
+env:
+  - name: ENVIRONMENT
+    value: "production"
+
+serviceAccount:
+  create: false
+  name: ""
+
+
+
+
